@@ -1,59 +1,240 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistem Pakar Rekomendasi Obat Pertanian pada Tanaman Cabai
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web berbasis Laravel untuk membantu petani mengidentifikasi
+kemungkinan penyakit pada tanaman cabai berdasarkan gejala yang dipilih,
+kemudian memberikan rekomendasi obat pertanian berdasarkan hasil
+perhitungan sistem.
 
-## About Laravel
+Proyek ini dikembangkan sebagai tugas akhir Program Studi Teknik
+Informatika di Politeknik Negeri Jember sekaligus sebagai portofolio
+pengembangan backend.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Gambaran Proyek
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Sistem menggabungkan dua pendekatan:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1.  **Rule-Based dengan Forward Chaining** --- mencocokkan gejala yang
+    dipilih pengguna dengan aturan pengetahuan untuk memperoleh kandidat
+    penyakit.
+2.  **Weighted Product (WP)** --- menghitung nilai preferensi kandidat
+    berdasarkan bobot gejala dan hasil pencocokan, lalu mengurutkan
+    hasil rekomendasi.
 
-## Learning Laravel
+Pemisahan kedua proses tersebut membantu menjaga alur diagnosis tetap
+terstruktur: aturan digunakan untuk menentukan kandidat, sedangkan
+Weighted Product digunakan untuk melakukan pemeringkatan.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Fitur Utama
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Pengguna / Petani
 
-## Laravel Sponsors
+-   Registrasi dan login.
+-   Melakukan diagnosis berdasarkan gejala tanaman cabai.
+-   Melihat hasil diagnosis dan rekomendasi yang dihasilkan sistem.
+-   Melihat riwayat diagnosis.
+-   Mengelola informasi profil.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Administrator
 
-### Premium Partners
+-   Mengelola data penyakit.
+-   Mengelola data gejala.
+-   Mengelola data obat pertanian.
+-   Mengelola aturan dan basis pengetahuan.
+-   Melihat data diagnosis.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Autentikasi
 
-## Contributing
+-   Login dan registrasi pengguna.
+-   Fitur lupa kata sandi dan reset kata sandi.
+-   Pemisahan akses berdasarkan peran pengguna.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+> Ketersediaan pengiriman email untuk reset kata sandi bergantung pada
+> konfigurasi mail di lingkungan aplikasi.
 
-## Code of Conduct
+## Teknologi
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+  Area                    Teknologi
+  ----------------------- ------------------------------
+  Backend                 PHP, Laravel 12
+  Database                MySQL
+  Frontend                Blade, HTML, CSS, JavaScript
+  Styling UI              Tailwind CSS dan CSS
+  Dependency management   Composer, npm
+  Version control         Git, GitHub
 
-## Security Vulnerabilities
+## Alur Diagnosis
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1.  Pengguna memilih gejala yang ditemukan pada tanaman cabai.
+2.  Sistem memeriksa kecocokan gejala dengan aturan pengetahuan
+    menggunakan Rule-Based dan Forward Chaining.
+3.  Sistem memperoleh kandidat penyakit berdasarkan aturan yang
+    terpenuhi.
+4.  Kandidat diproses menggunakan metode Weighted Product untuk
+    memperoleh nilai preferensi.
+5.  Sistem menampilkan hasil diagnosis dan rekomendasi obat pertanian
+    sesuai data yang tersedia pada aplikasi.
 
-## License
+### Ringkasan Basis Pengetahuan
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Basis pengetahuan pada penelitian ini disusun berdasarkan data yang
+dikumpulkan bersama narasumber ahli.
+
+-   **5** penyakit
+-   **10** gejala
+-   **15** aturan
+
+Nilai dan hasil diagnosis bergantung pada aturan, bobot, serta data yang
+tersimpan dalam aplikasi. Sistem ini merupakan alat bantu rekomendasi,
+bukan pengganti pemeriksaan langsung oleh ahli pertanian.
+
+## Persyaratan
+
+Pastikan perangkat pengembangan sudah memiliki:
+
+-   PHP 8.2 atau versi yang kompatibel dengan dependensi proyek.
+-   Composer.
+-   MySQL.
+-   Node.js dan npm.
+-   Git.
+
+## Instalasi Lokal
+
+### 1. Clone repository
+
+``` bash
+git clone https://github.com/renshu25/sistem-pakar-cabai.git
+cd sistem-pakar-cabai
+```
+
+### 2. Instal dependensi PHP
+
+``` bash
+composer install
+```
+
+### 3. Siapkan file environment
+
+Salin `.env.example` menjadi `.env`.
+
+Windows PowerShell:
+
+``` powershell
+Copy-Item .env.example .env
+```
+
+Linux/macOS:
+
+``` bash
+cp .env.example .env
+```
+
+Buat application key:
+
+``` bash
+php artisan key:generate
+```
+
+### 4. Konfigurasikan database
+
+Buat database MySQL baru, kemudian sesuaikan konfigurasi berikut di file
+`.env`:
+
+``` dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sistempakarcabai
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Sesuaikan nama database, username, dan password dengan konfigurasi
+lokal. Jangan mengunggah file `.env` atau kredensial asli ke repository.
+
+### 5. Jalankan migration dan seeder
+
+``` bash
+php artisan migrate --seed
+```
+
+Perintah ini membuat tabel dan menjalankan seeder yang tersedia.
+Jalankan pada database pengembangan yang baru disiapkan, bukan pada
+database yang berisi data penting.
+
+### 6. Instal dan build aset frontend
+
+``` bash
+npm install
+npm run build
+```
+
+### 7. Jalankan aplikasi
+
+``` bash
+php artisan serve
+```
+
+Buka alamat lokal yang ditampilkan oleh Artisan di browser.
+
+> **Catatan:** Petunjuk instalasi ini perlu diuji kembali pada clone
+> bersih sebelum dianggap tervalidasi. Jika migration atau seeder
+> mengalami error, periksa pesan error dan konfigurasi database terlebih
+> dahulu.
+
+## Struktur Backend
+
+Beberapa direktori utama yang digunakan dalam aplikasi Laravel:
+
+``` text
+app/
+├── Http/
+│   └── Controllers/
+│       ├── Admin/       # Pengelolaan data oleh administrator
+│       ├── Auth/        # Autentikasi dan pemulihan kata sandi
+│       └── User/        # Diagnosis, profil, dan riwayat pengguna
+├── Models/              # Model dan relasi data
+└── Services/
+    └── DiagnosaService.php  # Logika proses diagnosis
+database/
+├── migrations/          # Definisi struktur database
+└── seeders/             # Data awal aplikasi
+resources/
+└── views/               # Tampilan Blade
+routes/
+└── web.php              # Rute aplikasi web
+```
+
+## Fokus Implementasi Backend
+
+-   Mengembangkan alur diagnosis yang memisahkan pencocokan aturan dan
+    pemeringkatan hasil.
+-   Mengelola data penyakit, gejala, obat, dan basis pengetahuan.
+-   Menggunakan model dan relasi untuk menghubungkan data diagnosis.
+-   Mengatur rute dan controller untuk fitur administrator dan pengguna.
+-   Menyediakan riwayat diagnosis serta pengelolaan profil.
+-   Menyiapkan alur autentikasi termasuk pemulihan kata sandi.
+
+## Pengembangan Berikutnya
+
+-   Menambahkan automated test untuk aturan diagnosis dan perhitungan
+    Weighted Product.
+-   Menambahkan dokumentasi contoh input, bobot, dan perhitungan hasil
+    secara terperinci.
+-   Menambahkan screenshot antarmuka dan demonstrasi alur diagnosis.
+-   Memvalidasi instalasi dari clone bersih dan melengkapi panduan
+    konfigurasi email.
+-   Meninjau kembali konsistensi migration agar instalasi baru dapat
+    direproduksi dengan mudah.
+
+## Batasan
+
+Hasil rekomendasi dipengaruhi oleh kelengkapan basis pengetahuan, bobot
+gejala, dan aturan yang digunakan. Pengguna sebaiknya mengonfirmasi
+penanganan penyakit tanaman dengan ahli pertanian, terutama sebelum
+menggunakan obat atau pestisida.
+
+## Kontribusi dan Lisensi
+
+Repository ini dipublikasikan untuk dokumentasi proyek dan portofolio.
+Jika ingin menggunakan, mengadaptasi, atau mendistribusikan ulang kode,
+periksa ketentuan lisensi proyek dan atribusi yang berlaku.
