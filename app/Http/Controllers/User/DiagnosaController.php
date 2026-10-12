@@ -18,48 +18,77 @@ class DiagnosaController extends Controller
     /**
      * Halaman pilih gejala
      */
-    public function index()
-    {
-        $gejala = Gejala::orderBy('kode_gejala')->get();
+public function index()
+{
+    // Mengambil semua master gejala untuk dicentang user
+    $gejalaData = \App\Models\Gejala::orderBy('kode_gejala', 'asc')->get();
 
-        return view('user.diagnosa.index', compact('gejala'));
-    }
-
+    return view('user.diagnosa.index', compact('gejalaData'));
+}
     /**
      * Proses diagnosa (Rule-Based + Weighted Product)
      */
 public function proses(Request $request)
 {
     $inputGejala = $request->gejala ?? [];
-    
+
     if (empty($inputGejala)) {
         return back()->with('error', 'Pilih minimal 1 gejala.');
     }
 
-    $hasil = $this->service->prosesDiagnosa($inputGejala);
-    $diagnosa = $hasil['diagnosa'];
-    session(['ranking' => $hasil['ranking']]);
 
-    return redirect()->route('user.diagnosa.hasil', $diagnosa->id);
+    // hapus data session ranking lama
+    session()->forget('ranking');
+
+
+    $hasil = $this->service->prosesDiagnosa($inputGejala);
+
+
+    if($hasil['diagnosa'] == null){
+
+        return back()->with(
+            'error',
+            $hasil['pesan']
+        );
+
+    }
+
+
+    $diagnosa = $hasil['diagnosa'];
+
+
+    // simpan ranking hasil baru
+    session()->put(
+        'ranking',
+        $hasil['ranking']
+    );
+
+
+    return redirect()->route(
+        'user.diagnosa.hasil',
+        $diagnosa->id
+    );
 }
 
     /**
      * Hasil diagnosa
      */
     public function hasil($id)
-    {
-        $diagnosa = Diagnosa::with([
-            'penyakit.obat',
-            'gejala'
-        ])->findOrFail($id);
+{
+    $diagnosa = Diagnosa::with([
+        'penyakit.obat',
+        'gejala'
+    ])->findOrFail($id);
 
-        $ranking = session('ranking', []);
 
-        return view('user.diagnosa.hasil', compact(
-            'diagnosa',
-            'ranking'
-        ));
-    }
+    $ranking = session('ranking', []);
+
+
+    return view('user.diagnosa.hasil', compact(
+        'diagnosa',
+        'ranking'
+    ));
+}
 
     /**
      * Riwayat diagnosa user

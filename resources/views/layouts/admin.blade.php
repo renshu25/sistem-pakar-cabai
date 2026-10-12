@@ -110,6 +110,72 @@
       font-weight: 600;
     }
 
+    /* DROPDOWN USER */
+    .user-dropdown-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .15s;
+    }
+
+    .user-dropdown-btn:hover { background: var(--bg-page); }
+
+    .top-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(74,140,74,.15);
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .top-user-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .dropdown-menu {
+      min-width: 220px;
+      border-radius: 12px !important;
+      border: 1px solid var(--border) !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,.07) !important;
+      padding: 6px !important;
+    }
+
+    .dropdown-header {
+      padding: 10px 12px;
+      line-height: 1.5;
+    }
+
+    .dropdown-item {
+      border-radius: 7px;
+      font-size: 13px;
+      padding: 8px 12px;
+      color: var(--text-primary);
+    }
+
+    .dropdown-item:hover {
+      background: var(--green-soft);
+      color: #2d5e2d;
+    }
+
+    .dropdown-item.text-danger:hover {
+      background: #fcebeb;
+      color: #a32d2d;
+    }
+
     /* MAIN */
     .main {
       margin-left: var(--sidebar-w);
@@ -120,13 +186,12 @@
       padding: 24px;
     }
 
-    /* CARD STYLE (SAMAKAN DENGAN USER) */
+    /* CARD */
     .card {
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: var(--bg-white);
     }
-
   </style>
 </head>
 
@@ -154,8 +219,8 @@
      <i class="ti ti-list-details"></i> Gejala
   </a>
 
-  <a class="nav-link @if(Request::routeIs('admin.basis.*')) active @endif"
-     href="{{ route('admin.basis.index') }}">
+  <a class="nav-link @if(Request::routeIs('admin.rule.*')) active @endif"
+     href="{{ route('admin.rule.index') }}">
      <i class="ti ti-sitemap"></i> Rule
   </a>
 
@@ -176,15 +241,48 @@
     <strong>@yield('page-title','Dashboard')</strong>
   </div>
 
-  <div style="display:flex;align-items:center;gap:10px;">
+  <div style="display:flex; align-items:center; gap:10px;">
     <span class="badge-role">Admin</span>
 
-    <form method="POST" action="{{ route('logout') }}">
-      @csrf
-      <button style="border:none;background:none;color:#666;font-size:13px;">
-        Logout
+    <div class="dropdown">
+      <button class="user-dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="top-avatar">
+          {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+        </div>
+        <span class="top-user-name">{{ auth()->user()->name }}</span>
+        <i class="ti ti-chevron-down" style="font-size:14px; color:var(--text-muted);" aria-hidden="true"></i>
       </button>
-    </form>
+
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li class="dropdown-header">
+          <strong>{{ auth()->user()->name }}</strong><br>
+          <small class="text-muted">{{ auth()->user()->email }}</small>
+        </li>
+
+        <li><hr class="dropdown-divider"></li>
+
+<li>
+  <a class="dropdown-item" href="#">
+    <i class="ti ti-user me-2" aria-hidden="true"></i>
+    Profil Saya
+  </a>
+</li>
+
+<li><hr class="dropdown-divider"></li>
+
+        <li><hr class="dropdown-divider"></li>
+
+        <li>
+          <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="dropdown-item text-danger">
+              <i class="ti ti-logout me-2" aria-hidden="true"></i>
+              Logout
+            </button>
+          </form>
+        </li>
+      </ul>
+    </div>
   </div>
 </header>
 
@@ -200,5 +298,6 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+@yield('scripts')
 </body>
 </html>

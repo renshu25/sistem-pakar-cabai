@@ -33,7 +33,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+protected $table = 'users';
     /**
      * Get the attributes that should be cast.
      *

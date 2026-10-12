@@ -627,7 +627,7 @@
                     <tr>
                         <th>Tanggal</th>
                         <th>Hasil Diagnosa</th>
-                        <th>Tingkat Keyakinan</th>
+                        <th>Nilai Preferensi</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -6,9 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class DiagnosaGejala extends Model
 {
+    protected $table = 'diagnosa_gejala';
+
+    public $timestamps = false;
+
     protected $fillable = [
-        'kode_gejala',
-        'nama_gejala',
-        'bobot'
+        'diagnosa_id',
+        'gejala_id',
+        'nilai_user'
     ];
+
+    public function diagnosa()
+    {
+        return $this->belongsTo(Diagnosa::class);
+    }
+
+    public function gejala()
+    {
+        return $this->belongsTo(Gejala::class);
+    }
 }

@@ -12,34 +12,100 @@ class DatabaseSeeder extends Seeder {
         User::create(['name'=>'Budi Santoso','email'=>'budi@petani.id','password'=>Hash::make('password'),'role'=>'user']);
 
         // Penyakit
-        $penyakitData = [
-            ['P001','Antraknosa','Penyakit jamur Colletotrichum capsici yang menyebabkan bercak hitam pada buah cabai.'],
-            ['P002','Busuk Phytophthora','Disebabkan Phytophthora capsici, menyerang akar, batang, dan buah.'],
-            ['P003','Layu Fusarium','Jamur Fusarium oxysporum menyumbat pembuluh air tanaman hingga layu.'],
-            ['P004','Virus Kuning (Gemini)','Ditularkan oleh kutu kebul, daun menguning dan menggulung ke atas.'],
-            ['P005','Bercak Daun Cercospora','Jamur Cercospora capsici membentuk bercak putih di tengah daun.'],
-            ['P006','Layu Bakteri','Ralstonia solanacearum menyebabkan tanaman layu mendadak total.'],
-        ];
-        foreach ($penyakitData as [$kode,$nama,$desk]) {
-            Penyakit::create(['kode_penyakit'=>$kode,'nama_penyakit'=>$nama,'deskripsi'=>$desk]);
-        }
+// Penyakit
+$penyakitData = [
+
+    [
+        'P001',
+        'Layu Fusarium',
+        'Penyakit layu yang disebabkan oleh jamur Fusarium oxysporum. Patogen menyerang jaringan pembuluh tanaman sehingga menghambat proses pengangkutan air dan unsur hara. Gejala utama ditandai dengan daun menguning, tanaman mengalami kelayuan, pertumbuhan terhambat, dan pada kondisi parah tanaman dapat mengalami kematian.'
+    ],
+
+
+    [
+        'P002',
+        'Antraknosa',
+        'Penyakit yang disebabkan oleh jamur Colletotrichum spp. yang menyerang bagian buah, terutama pada kondisi lingkungan lembap. Gejala ditandai dengan munculnya bercak cekung berwarna gelap pada buah, perkembangan bercak semakin meluas, buah membusuk, serta menyebabkan penurunan kualitas dan hasil produksi cabai.'
+    ],
+
+
+    [
+        'P003',
+        'Busuk Akar',
+        'Penyakit yang menyerang sistem perakaran tanaman cabai akibat infeksi patogen pada area akar. Serangan menyebabkan kerusakan jaringan akar sehingga kemampuan tanaman dalam menyerap air dan nutrisi menurun. Gejala yang muncul berupa tanaman layu, pertumbuhan tidak optimal, akar mengalami pembusukan, dan tanaman dapat mati secara bertahap.'
+    ],
+
+
+    [
+        'P004',
+        'Bercak Daun Alternaria',
+        'Penyakit yang disebabkan oleh jamur Alternaria spp. yang menyerang bagian daun tanaman cabai. Infeksi menyebabkan munculnya bercak berbentuk tidak beraturan dengan warna coklat hingga kehitaman pada permukaan daun. Serangan berat dapat menyebabkan daun mengering, gugur, serta mengganggu proses fotosintesis tanaman.'
+    ],
+
+
+    [
+        'P005',
+        'Busuk Buah Basah',
+        'Penyakit yang menyerang buah cabai akibat infeksi mikroorganisme patogen yang berkembang pada kondisi lembap. Gejala ditandai dengan buah mengalami pelunakan, perubahan warna, munculnya pembusukan berair, serta dapat menyebar dengan cepat sehingga menyebabkan kerusakan dan kehilangan hasil panen.'
+    ],
+
+];
+
+
+foreach ($penyakitData as [$kode,$nama,$desk]) {
+
+    Penyakit::create([
+
+        'kode_penyakit'=>$kode,
+
+        'nama_penyakit'=>$nama,
+
+        'deskripsi'=>$desk
+
+    ]);
+
+}
 
         // Gejala
-        $gejalaData = [
-            ['G001','Bercak hitam / coklat pada buah',0.8],
-            ['G002','Daun menguning (klorosis)',0.7],
-            ['G003','Tanaman layu mendadak',0.9],
-            ['G004','Buah busuk lunak berair',0.6],
-            ['G005','Daun menggulung ke atas',0.6],
-            ['G006','Pembuluh batang berwarna coklat',0.8],
-            ['G007','Bercak putih bersalut abu pada daun',0.5],
-            ['G008','Kutu kebul pada permukaan bawah daun',0.9],
-            ['G009','Buah berubah warna sebelum masak',0.5],
-            ['G010','Akar membusuk berwarna coklat kehitaman',0.7],
-        ];
-        foreach ($gejalaData as [$kode,$nama,$bobot]) {
-            Gejala::create(['kode_gejala'=>$kode,'nama_gejala'=>$nama,'bobot'=>$bobot]);
-        }
+// Gejala
+$gejalaData = [
+
+    ['G01','Daun Menguning',0.167],
+
+    ['G02','Bercak hitam pada daun',0.125],
+
+    ['G03','Batang membusuk',0.083],
+
+    ['G04','Buah keriput',0.125],
+
+    ['G05','Daun Menggulung',0.083],
+
+    ['G06','Pertumbuhan Lambat',0.042],
+
+    ['G07','Akar Busuk/Berjamur',0.083],
+
+    ['G08','Jamur Putih Pangkal Batang',0.083],
+
+    ['G09','Buah Cabai Busuk Basah',0.083],
+
+    ['G10','Bercak Coklat Pada Buah',0.125],
+
+];
+
+
+foreach ($gejalaData as [$kode,$nama,$bobot]) {
+
+    Gejala::create([
+
+        'kode_gejala'=>$kode,
+
+        'nama_gejala'=>$nama,
+
+        'bobot'=>$bobot
+
+    ]);
+
+}
 
         // Obat
         $obatData = [
@@ -56,42 +122,92 @@ class DatabaseSeeder extends Seeder {
 
         // Relasi penyakit-obat
 $p = Penyakit::get()->keyBy('kode_penyakit');
+
 $o = Obat::pluck('id','kode_obat');
 
-$p['P001']->obat()->attach([$o['O001'],$o['O002'],$o['O005']]);
-$p['P002']->obat()->attach([$o['O004']]);
-$p['P004']->obat()->attach([$o['O003']]);
-$p['P006']->obat()->attach([$o['O006']]);
 
-        // Basis Pengetahuan (Rules)
-        $g = Gejala::pluck('id','kode_gejala');
+// Layu Fusarium
+$p['P001']->obat()->attach([
+    $o['O004']
+]);
+
+
+// Antraknosa
+$p['P002']->obat()->attach([
+    $o['O001'],
+    $o['O002'],
+    $o['O005']
+]);
+
+
+// Busuk Akar
+$p['P003']->obat()->attach([
+    $o['O004']
+]);
+
+
+// Bercak Daun Alternaria
+$p['P004']->obat()->attach([
+    $o['O002']
+]);
+
+
+// Busuk Buah Basah
+$p['P005']->obat()->attach([
+    $o['O001'],
+    $o['O005']
+]);
+
+// Basis Pengetahuan (Rules)
+
+$g = Gejala::pluck('id','kode_gejala');
+
 $rules = [
- ['R001',$p['P001']->id,$g['G001'],0.8],
- ['R002',$p['P001']->id,$g['G004'],0.7],
- ['R003',$p['P001']->id,$g['G009'],0.5],
 
- ['R004',$p['P002']->id,$g['G004'],0.8],
- ['R005',$p['P002']->id,$g['G010'],0.7],
 
- ['R006',$p['P003']->id,$g['G003'],0.6],
- ['R007',$p['P003']->id,$g['G006'],0.8],
+['R01',$p['P001']->id,$g['G01'],0.167],
+['R02',$p['P001']->id,$g['G03'],0.083],
+['R03',$p['P001']->id,$g['G07'],0.083],
 
- ['R008',$p['P004']->id,$g['G002'],0.9],
- ['R009',$p['P004']->id,$g['G005'],0.6],
- ['R010',$p['P004']->id,$g['G008'],0.9],
 
- ['R011',$p['P005']->id,$g['G007'],0.7],
+['R04',$p['P002']->id,$g['G02'],0.125],
+['R05',$p['P002']->id,$g['G04'],0.125],
+['R06',$p['P002']->id,$g['G10'],0.125],
 
- ['R012',$p['P006']->id,$g['G003'],0.9],
- ['R013',$p['P006']->id,$g['G006'],0.5],
+
+['R07',$p['P003']->id,$g['G06'],0.042],
+['R08',$p['P003']->id,$g['G07'],0.083],
+['R09',$p['P003']->id,$g['G08'],0.083],
+
+
+['R10',$p['P004']->id,$g['G01'],0.167],
+['R11',$p['P004']->id,$g['G02'],0.125],
+['R12',$p['P004']->id,$g['G05'],0.083],
+
+
+['R13',$p['P005']->id,$g['G09'],0.083],
+['R14',$p['P005']->id,$g['G10'],0.125],
+['R15',$p['P005']->id,$g['G03'],0.083],
+
+
 ];
+
+
 foreach ($rules as [$kode,$pid,$gid,$bobot]) {
+
+
     PenyakitGejala::create([
-        'kode_rule'     => $kode,
-        'penyakit_id'   => $pid,
-        'gejala_id'     => $gid,
-        'bobot_gejala'  => $bobot
+
+        'kode_rule'=>$kode,
+
+        'penyakit_id'=>$pid,
+
+        'gejala_id'=>$gid,
+
+        'bobot_gejala'=>$bobot
+
     ]);
+
 }
     }
 }
